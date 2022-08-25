@@ -8,6 +8,7 @@ import globals
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 import warnings
+
 warnings.filterwarnings('ignore')
 
 
@@ -30,27 +31,27 @@ class AudioDataGenerator:
         X_mfccs = []
         X_melspecs = []
         y = []
+
         for i, (dirpath, dirnames, filenames) in enumerate(os.walk(self.directory_path)):
-            print(str(i)+" "+dirpath)
+            # print(str(i)+" "+dirpath)
             if i != 0:
-                globals.MAPPINGS.append(dirpath.split("/")[-1])
                 for index in range(1, len(filenames)):
                     signal_list = []
-                    #print(filenames[index])
+                    # print(filenames[index])
                     signal, sr = librosa.load(os.path.join(dirpath, filenames[index]), sr=globals.SAMPLE_RATE,
                                               duration=globals.TRACK_LENGTH)
                     # audio data augmentation to increase data set size
-                    #print(signal.shape)
+                    # print(signal.shape)
                     signal_list.append(signal)
                     signal_list.append(self.__add_noise(signal))
                     signal_list.append(self.__pitch_augment(signal))
                     for signal in signal_list:
                         mfccs, melspecs, labels = self.__get_mfcc_melspecs(signal, i - 1)
-                        #print(mfccs[0])
+                        # print(mfccs[0])
                         X_mfccs.extend(mfccs)
                         X_melspecs.extend(melspecs)
                         y.extend(labels)
-                    break   #remove to process the whole dataset
+                    break  # remove to process the whole dataset
                 break
 
         return X_mfccs, X_melspecs, y
@@ -75,10 +76,11 @@ class AudioDataGenerator:
         for i in range(globals.SEGMENTS):
             start = globals.NO_OF_SAMPLES_PER_SEGMENT * i
             end = start + globals.NO_OF_SAMPLES_PER_SEGMENT
-            mfcc = librosa.feature.mfcc(signal[start:end], sr=globals.SAMPLE_RATE, n_fft=globals.N_FFT, hop_length=globals.HOP_LENGTH,
+            mfcc = librosa.feature.mfcc(signal[start:end], sr=globals.SAMPLE_RATE, n_fft=globals.N_FFT,
+                                        hop_length=globals.HOP_LENGTH,
                                         n_mfcc=globals.N_MELS)
             mfcc = mfcc.T
-            #print(mfcc.shape)
+            # print(mfcc.shape)
             if len(mfcc) == globals.EXPECTED_LEN_OF_MFCC_VECTOR:
                 melspec = self.__get_melspecs_from_canvas(signal[start:end])
                 mfcc_list.append(mfcc.tolist())
@@ -88,10 +90,12 @@ class AudioDataGenerator:
 
     def __get_melspecs_from_canvas(self, signal):
 
-        melspec = librosa.feature.melspectrogram(signal, sr=globals.SAMPLE_RATE, n_fft=globals.N_FFT, hop_length=globals.HOP_LENGTH,
+        melspec = librosa.feature.melspectrogram(signal, sr=globals.SAMPLE_RATE, n_fft=globals.N_FFT,
+                                                 hop_length=globals.HOP_LENGTH,
                                                  n_mels=globals.N_MELS)
         melspec = librosa.power_to_db(melspec, ref=np.max)
-        mel_spec_figure = librosa.display.specshow(melspec, hop_length=globals.HOP_LENGTH, sr=globals.SAMPLE_RATE).get_figure()
+        mel_spec_figure = librosa.display.specshow(melspec, hop_length=globals.HOP_LENGTH,
+                                                   sr=globals.SAMPLE_RATE).get_figure()
         canvas = FigureCanvasAgg(mel_spec_figure)
         canvas.draw()
         prr, (width, height) = canvas.print_to_buffer()

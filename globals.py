@@ -3,7 +3,7 @@ import math
 DIRECTORY = "genres_original"
 JSON_PATH = "data.json"
 MODEL_PATH = "model.h5"
-MAPPINGS = ["hiphop"]
+MAPPINGS = ['hiphop', 'rock', 'metal', 'classical', 'country', 'disco', 'pop', 'blues', 'reggae', 'jazz']
 
 NO_OF_LABELS = 10
 SEGMENTS = 10

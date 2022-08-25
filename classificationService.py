@@ -12,10 +12,11 @@ class _classificationService:
     def predict(self, file_path):
         mfcc = self.preprocess(file_path)
         mfcc = mfcc[np.newaxis, ...]
-        print(mfcc.shape)
-        predictions = self._model.predict(mfcc)
+        #print(mfcc.shape)
+        predictions = self._model.predict(mfcc).squeeze()
+        #print(predictions)
         index = np.argmax(predictions)
-        print(index)
+        #print(index)
         return globals.MAPPINGS[index]
 
     def preprocess(self, file_path):
@@ -23,6 +24,7 @@ class _classificationService:
         if len(signal) > globals.NO_OF_SAMPLES_PER_SEGMENT:
             signal = signal[:globals.NO_OF_SAMPLES_PER_SEGMENT]
         mfcc = librosa.feature.mfcc(signal, n_mfcc=globals.N_MELS, n_fft=globals.N_FFT, hop_length=globals.HOP_LENGTH)
+        #print(mfcc.shape)
         return mfcc.T
 
 
@@ -35,5 +37,5 @@ def classification_service():
 
 if __name__ == "__main__":
     csobj = classification_service()
-    prediction = csobj.predict("genres_original/blues/blues.00000.wav")
+    prediction = csobj.predict("genres_original/jazz/jazz.00003.wav")
     print(f"Prediction:{prediction}")
