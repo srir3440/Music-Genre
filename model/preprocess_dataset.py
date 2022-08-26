@@ -1,4 +1,3 @@
-import math
 import librosa
 import librosa.display
 import os
@@ -108,7 +107,7 @@ class AudioDataGenerator:
 
 
 if __name__ == "__main__":
-    audio_obj = AudioDataGenerator("genres_original", 32)
+    audio_obj = AudioDataGenerator("../dataset/genres_original", 32)
     print(globals.MAPPINGS)
     print(len(audio_obj.data["MFCCS"]))
     print(len(audio_obj.data["MelSpectrograms"]))

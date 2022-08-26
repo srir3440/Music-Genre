@@ -3,7 +3,7 @@ import numpy as np
 import globals
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.layers import Dense, Input, LSTM, Dropout, GlobalMaxPool1D
+from tensorflow.keras.layers import Dense, Input, LSTM, GlobalMaxPool1D
 from tensorflow.keras import Model
 from tensorflow.keras.optimizers import Adam
 

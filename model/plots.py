@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 import matplotlib.pyplot as plt
 
-FILE_PATH = "genres_original/blues/blues.00000.wav"
+FILE_PATH = "../dataset/genres_original/blues/blues.00000.wav"
 SAMPLE_RATE = 22050
 N_FFT = 2048
 HOP_LENGTH = 512
